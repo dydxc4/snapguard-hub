@@ -23,7 +23,11 @@ builder.Services.AddResponseCompression(opts =>
         ["application/octet-stream"]);
 }); */
 
-builder.Services.Configure<MqttSettings>(builder.Configuration.GetSection("Mqtt"));
+builder.Services.Configure<MqttSettings>(
+    builder.Configuration.GetSection("Mqtt"));
+builder.Services.Configure<PictureServerSettings>(
+    builder.Configuration.GetSection("PictureServer"));
+
 builder.Services.AddSingleton<IdGenerationService>();
 builder.Services.AddSingleton<RequestCorrelationService>();
 builder.Services.AddSingleton<CorrelationService>();
