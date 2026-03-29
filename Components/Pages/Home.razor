@@ -1,0 +1,63 @@
+﻿@page "/"
+@using SnapGuard.Hub.Extensions
+@using SnapGuard.Hub.Services
+@using System.Text.Json
+@rendermode InteractiveServer
+@inject IdGenerationService IdGenerator
+@inject IMqttClientService ClientService
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<p role="status">Is waiting? @(isWaiting)</p>
+<p role="status">Status: @(statusText ?? "Ok")</p>
+
+<button @onclick="TakePicture">Take picture!</button>
+<button @onclick="GetConfig">Get configuration</button>
+
+@code {
+    private bool isWaiting = false;
+    private string? statusText = null;
+
+    protected override async Task OnInitializedAsync()
+    { }
+
+    private async Task TakePicture()
+    {
+        try
+        {
+            isWaiting = true;
+            await ClientService.TakePicture(1);
+            statusText = null;
+        }
+        catch (Exception ex)
+        {
+            statusText = ex.Message;
+        }
+        finally
+        {
+            isWaiting = false;
+        }
+    }
+
+    private async Task GetConfig()
+    {
+        try
+        {
+            isWaiting = true;
+            var result = await ClientService.GetCameraConfig(1);
+            statusText = JsonSerializer.Serialize(result);
+        }
+        catch (Exception ex)
+        {
+            statusText = ex.Message;
+        }
+        finally
+        {
+            isWaiting = false;
+        }
+    }
+}
