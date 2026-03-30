@@ -6,14 +6,14 @@ namespace SnapGuard.Hub.DTOs.Requests;
 public class PictureUploadRequest
 {
     [FromForm(Name = "picture")]
-    public required IFormFile Picture { get; set; }
+    public required IFormFile Picture { get; init; }
 
-    [FromHeader(Name = "resolution")]
-    public required CameraFrameSize Resolution { get; set; }
+    [FromHeader(Name = "SG-Resolution")]
+    public required CameraFrameSize Resolution { get; init; }
 
-    [FromHeader(Name = "timestamp")]
-    public required long Timestamp { get; set; }
+    [FromHeader(Name = "SG-Timestamp")]
+    public required long Timestamp { get; init; }
 
-    [FromHeader(Name = "motionTimestamp")]
-    public long? MotionTimestamp { get; set; }
+    [FromHeader(Name = "SG-Motion-Timestamp")]
+    public long? MotionTimestamp { get; init; }
 }

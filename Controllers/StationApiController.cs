@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SnapGuard.Hub.Configurations;
 using SnapGuard.Hub.DTOs.Requests;
+using SnapGuard.Hub.DTOs.Responses;
 using SnapGuard.Hub.Helpers;
 
 namespace SnapGuard.Hub.Controllers;
@@ -17,12 +18,12 @@ public class StationApiController(
     public ILogger<StationApiController> _logger = logger;
 
     [HttpPost("{stationId}/uploadPicture")]
+    [ProducesResponseType<PictureUploadResponse>(200)]
     public async Task<IActionResult> UploadPicture(int stationId, PictureUploadRequest request)
     {
         // Verifica el tamaño del archivo
         if (request.Picture.Length == 0 || request.Picture.Length > 5 * 1024 * 1024)
             return BadRequest("Invalid picture size");
-
 
         // Valida que el archivo corresponda a una imagen válida
         using var pictureStream = request.Picture.OpenReadStream();
@@ -41,6 +42,10 @@ public class StationApiController(
         await request.Picture.CopyToAsync(fileStream);
         await fileStream.FlushAsync();
 
-        return Ok(fileName);
+        // Envia el identificador de la imagen como respuesta
+        return Ok(new PictureUploadResponse
+        {
+            PictureId = Random.Shared.Next()
+        });
     }
 }
