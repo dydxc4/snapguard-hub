@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="SnapGuard.Hub/SnapGuard.Hub.csproj" />
+  <Project Path="SnapGuard.MockStation/SnapGuard.MockStation.csproj" />
   <Project Path="SnapGuard/SnapGuard.csproj" />
 </Solution>
