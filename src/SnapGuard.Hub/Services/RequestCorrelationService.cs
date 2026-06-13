@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using SnapGuard.Hub.Types;
+using SnapGuard.Types;
 
 namespace SnapGuard.Hub.Services;
 

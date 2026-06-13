@@ -1,7 +1,7 @@
-using SnapGuard.Hub.Requests;
+using SnapGuard.Requests;
 using SnapGuard.Hub.Services;
-using SnapGuard.Hub.Types.Enums;
-using SnapGuard.Hub.Types.Results;
+using SnapGuard.Types.Results;
+using SnapGuard.Types.Enums;
 
 namespace SnapGuard.Hub.Extensions;
 

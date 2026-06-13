@@ -4,9 +4,10 @@ using Microsoft.Extensions.Options;
 using MQTTnet;
 using MQTTnet.Protocol;
 using SnapGuard.Hub.Configurations;
-using SnapGuard.Hub.Requests;
 using SnapGuard.Hub.Types;
-using SnapGuard.Hub.Types.Enums;
+using SnapGuard.Requests;
+using SnapGuard.Types;
+using SnapGuard.Types.Enums;
 
 namespace SnapGuard.Hub.Services;
 
@@ -130,7 +131,7 @@ public class MqttClientService : IMqttClientService
 
         var payload = JsonSerializer.Serialize(request, _jsonOptions);
         var message = new MqttApplicationMessageBuilder()
-            .WithTopic($"snapguard/v1/station/{request.DeviceId}/{request.TopicName}")
+            .WithTopic($"snapguard/v1/station/{request.DeviceId}/{request.Topic}")
             .WithPayload(payload)
             .WithQualityOfServiceLevel(request.QoSLevel)
             .Build();

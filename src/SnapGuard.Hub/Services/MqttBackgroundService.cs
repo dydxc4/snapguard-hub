@@ -1,5 +1,5 @@
-using SnapGuard.Hub.Types;
-using SnapGuard.Hub.Types.Results;
+using SnapGuard.Types;
+using SnapGuard.Types.Results;
 
 namespace SnapGuard.Hub.Services;
 

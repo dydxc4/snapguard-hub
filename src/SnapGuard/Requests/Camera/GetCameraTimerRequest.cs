@@ -1,5 +1,3 @@
-using SnapGuard.Hub.Types.Results;
-
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public class GetCameraTimerConfigRequest() : StationRequestBase<CameraTimerConfig>("camera/timer/config/get");

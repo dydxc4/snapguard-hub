@@ -1,4 +1,4 @@
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public class TakePictureRequest() : StationRequestBase("camera/request/take_picture")
 {

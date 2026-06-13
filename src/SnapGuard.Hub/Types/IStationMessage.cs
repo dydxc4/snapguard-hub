@@ -1,6 +1,0 @@
-namespace SnapGuard.Hub.Types;
-
-public interface IStationMessage
-{
-    public long Timestamp { get; set; }
-}

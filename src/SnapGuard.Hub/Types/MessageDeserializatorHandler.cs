@@ -1,3 +1,5 @@
+using SnapGuard.Types;
+
 namespace SnapGuard.Hub.Types;
 
 public class MessageDeserializatorHandler

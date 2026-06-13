@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 using MQTTnet.Protocol;
 
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public interface IStationRequest
 {
     [JsonIgnore]
-    string TopicName { get; }
+    string Topic { get; }
 
     [JsonIgnore]
     MqttQualityOfServiceLevel QoSLevel { get; }

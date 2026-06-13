@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using SnapGuard.Hub.Types;
-using SnapGuard.Hub.Types.Enums;
 
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public class SetCameraConfigRequest() : StationRequestBase<StationResponse>("camera/config/set")
 {

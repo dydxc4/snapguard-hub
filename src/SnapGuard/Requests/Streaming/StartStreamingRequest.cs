@@ -1,3 +1,3 @@
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public class StartStreamingRequest() : StationRequestBase("streaming/request/start");

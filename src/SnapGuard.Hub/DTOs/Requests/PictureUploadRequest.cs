@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SnapGuard.Hub.Types.Enums;
+using SnapGuard.Types.Enums;
 
 namespace SnapGuard.Hub.DTOs.Requests;
 

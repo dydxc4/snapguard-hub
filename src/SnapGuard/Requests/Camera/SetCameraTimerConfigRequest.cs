@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public class SetCameraTimerConfigRequest() : StationRequestBase("camera/request/timer/set")
 {

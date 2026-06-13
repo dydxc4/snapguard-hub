@@ -1,16 +1,16 @@
 using System.Text.Json.Serialization;
 using MQTTnet.Protocol;
 
-namespace SnapGuard.Hub.Requests;
+namespace SnapGuard.Requests;
 
 public abstract class StationRequestBase(
-    string topicName,
+    string topic,
     MqttQualityOfServiceLevel qosLevel = MqttQualityOfServiceLevel.AtLeastOnce,
     TimeSpan timeout = default
 ) : IStationRequest
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-    public string TopicName { get; } = topicName;
+    public string Topic { get; } = topic;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
     public MqttQualityOfServiceLevel QoSLevel { get; } = qosLevel;
