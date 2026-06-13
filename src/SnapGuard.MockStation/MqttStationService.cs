@@ -44,6 +44,7 @@ public class MqttStationService
         // Inicializa cliente MQTT
         using var mqttClient = factory.CreateMqttClient();
         mqttClient.ApplicationMessageReceivedAsync += OnMessageReceivedAsync;
+        mqttClient.ConnectedAsync += OnConnectedAsync;
         await mqttClient.ConnectAsync(mqttClientOptions, cancellationToken);
 
         string baseTopic = $"snapguard/{Constants.SNAPGUARD_VERSION}/station/{clientConfig.StationId}";
@@ -161,9 +162,16 @@ public class MqttStationService
 
     }
 
+    private async Task OnConnectedAsync(MqttClientConnectedEventArgs args)
+    {
+        ConsoleLogger.LogInfo($"Connected to MQTT broker!",
+            args.ConnectResult.AssignedClientIdentifier,
+            args.ConnectResult.ResultCode);
+    }
+
     private async Task OnMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs args)
     {
-        Console.WriteLine("Message received on {0} from {1}",
+        ConsoleLogger.LogInfo("Message received on {0} from {1}",
             args.ApplicationMessage.Topic,
             args.ClientId);
     }

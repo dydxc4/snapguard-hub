@@ -23,11 +23,7 @@ try
 }
 catch (Exception exception)
 {
-    Console.BackgroundColor = ConsoleColor.Red;
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.WriteLine(exception.Message);
-    Console.ResetColor();
-
+    ConsoleLogger.LogError(exception.Message);
     return;
 }
 
@@ -44,10 +40,7 @@ try
 }
 catch (Exception exception)
 {
-    Console.BackgroundColor = ConsoleColor.Red;
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.WriteLine(exception.Message);
-    Console.ResetColor();
+    ConsoleLogger.LogError(exception.Message);
 }
 
 Console.WriteLine("\nPress ENTER to exit");
