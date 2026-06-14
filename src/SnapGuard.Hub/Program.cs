@@ -1,6 +1,8 @@
+using MySql.EntityFrameworkCore.Extensions;
 using SnapGuard.Hub.Components;
 using SnapGuard.Hub.Configurations;
 using SnapGuard.Hub.Services;
+using SnapGuard.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,10 +35,28 @@ builder.Services.AddSingleton<RequestCorrelationService>();
 builder.Services.AddSingleton<CorrelationService>();
 builder.Services.AddSingleton<IMqttClientService, MqttClientService>();
 builder.Services.AddHostedService<MqttBackgroundService>();
+builder.Services.AddMySQLServer<SnapGuardContext>(
+    builder.Configuration.GetConnectionString("MySQL")!
+);
 
 var app = builder.Build();
 //app.UseResponseCompression();
 //app.MapHub<DeviceHub>("/deviceHub");
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<SnapGuardContext>();
+        await context.Database.EnsureCreatedAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<SnapGuardContext>>();
+        logger.LogError(ex, "An error occurred creating the database");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
