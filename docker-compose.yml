@@ -1,0 +1,27 @@
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: '5uP3R_p@S5'
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb-data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+    volumes:
+      - mosquitto-config:/mosquitto/config
+
+volumes:
+  mariadb-data:
+  mosquitto-config:
