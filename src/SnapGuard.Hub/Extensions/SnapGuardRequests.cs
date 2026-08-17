@@ -2,6 +2,7 @@ using SnapGuard.Requests;
 using SnapGuard.Hub.Services;
 using SnapGuard.Types.Results;
 using SnapGuard.Types.Enums;
+using SnapGuard.Enums;
 
 namespace SnapGuard.Hub.Extensions;
 
@@ -20,8 +21,8 @@ public static class SnapGuardRequests
 
         public async Task SetCameraConfig(
             int deviceId,
-            CameraFrameSize? resolution = null,
-            CameraFrameFormat? format = null,
+            PictureResolution? resolution = null,
+            PictureFormat? format = null,
             decimal? panAngle = null,
             decimal? tiltAngle = null,
             int? quality = null,

@@ -2,7 +2,7 @@ namespace SnapGuard.Models;
 
 public record Hub
 {
-    public int HubId { get; set; }
+    public long HubId { get; set; }
 
     public required string Name { get; set; }
 
@@ -11,4 +11,6 @@ public record Hub
     public ICollection<Station> Stations { get; set; } = [];
 
     public ICollection<User> Users { get; set; } = [];
+
+    public ICollection<HubUser> HubUsers { get; set; } = [];
 }

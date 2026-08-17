@@ -4,33 +4,23 @@ namespace SnapGuard.Models;
 
 public record Station
 {
-    public int StationId { get; set; }
+    public long StationId { get; set; }
 
-    public int HubId { get; set; }
+    public long HubId { get; set; }
 
     public Hub Hub { get; set; } = null!;
 
-    public required string Name { get; set; }
+    public long StationModelId { get; set; }
+
+    public StationModel StationModel { get; set; } = null!;
+
+    public required string Label { get; set; }
 
     public PhysicalAddress MacAddress { get; set; } = null!;
-
-    public bool IsSolarPowered { get; set; }
-
-    public bool IsBatteryPowered { get; set; }
-
-    public bool HasCameraFlash { get; set; }
-
-    public bool HasPanTiltControl { get; set; }
-
-    public bool HasNightVision { get; set; }
 
     public string Version { get; set; } = null!;
 
     public string CoreVersion { get; set; } = null!;
-
-    public string CameraModelCode { get; set; } = null!;
-
-    public CameraModel CameraModel { get; set; } = null!;
 
     public DateTimeOffset RegisteredAt { get; set; }
 

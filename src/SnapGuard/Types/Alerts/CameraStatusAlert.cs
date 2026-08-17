@@ -1,5 +1,3 @@
-using SnapGuard.Types.Enums;
-
 namespace SnapGuard.Types.Alerts;
 
 public class CameraStatusAlert : StationAlertBase

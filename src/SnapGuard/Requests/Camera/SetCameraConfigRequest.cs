@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using SnapGuard.Enums;
 
 namespace SnapGuard.Requests;
 
 public class SetCameraConfigRequest() : StationRequestBase<StationResponse>("camera/config/set")
 {
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public CameraFrameSize? Resolution { get; set; }
+    public PictureResolution? Resolution { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public CameraFrameFormat? Format { get; set; }
+    public PictureFormat? Format { get; set; }
 
     [Range(-90, 90)]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

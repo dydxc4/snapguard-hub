@@ -1,6 +1,6 @@
-namespace SnapGuard.Types.Enums;
+namespace SnapGuard.Enums;
 
-public enum CameraFrameFormat
+public enum PictureFormat
 {
     RGB565,
     YUV422,

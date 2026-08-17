@@ -1,20 +1,22 @@
+using SnapGuard.Enums;
+
 namespace SnapGuard.Models;
 
 public record Picture
 {
-    public int PictureId { get; set; }
+    public long PictureId { get; set; }
 
-    public int? StationId { get; set; }
+    public long? StationId { get; set; }
 
     public Station? Station { get; set; }
 
     public required string FileName { get; set; }
 
-    public CameraFrameFormat Format { get; set; }
+    public PictureFormat Format { get; set; }
 
-    public CameraFrameSize Resolution { get; set; }
+    public PictureResolution Resolution { get; set; }
 
-    public int? MotionEventId { get; set; }
+    public long? MotionEventId { get; set; }
 
     public MotionEvent? MotionEvent { get; set; }
 

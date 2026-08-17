@@ -2,15 +2,15 @@ namespace SnapGuard.Models;
 
 public record MotionEvent
 {
-    public int MotionEventId { get; set; }
+    public long MotionEventId { get; set; }
 
-    public int StationId { get; set; }
+    public long StationId { get; set; }
 
     public Station Station { get; set; } = null!;
 
-    public DateTimeOffset StartTimestamp { get; set; }
+    public DateTimeOffset StartedAt { get; set; }
 
-    public DateTimeOffset? EndTimestamp { get; set; }
+    public DateTimeOffset? EndedAt { get; set; }
 
     public int TriggerCount { get; set; }
 

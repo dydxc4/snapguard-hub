@@ -1,0 +1,13 @@
+namespace SnapGuard.Enums;
+
+public enum EventType
+{
+    SYSTEM_RESTARTED,
+    SYSTEM_WOKE_UP,
+    SYSTEM_FAILED,
+    BROWNOUT_DETECTED,
+    WIFI_RECONNECTED,
+    WIFI_AUTH_FAILED,
+    CAMERA_FAILED,
+    TAMPERING_DETECTED,
+}

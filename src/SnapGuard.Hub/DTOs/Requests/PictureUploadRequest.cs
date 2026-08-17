@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SnapGuard.Types.Enums;
+using SnapGuard.Enums;
 
 namespace SnapGuard.Hub.DTOs.Requests;
 
@@ -9,7 +9,7 @@ public class PictureUploadRequest
     public required IFormFile Picture { get; init; }
 
     [FromHeader(Name = "SG-Resolution")]
-    public required CameraFrameSize Resolution { get; init; }
+    public required PictureResolution Resolution { get; init; }
 
     [FromHeader(Name = "SG-Timestamp")]
     public required long Timestamp { get; init; }
