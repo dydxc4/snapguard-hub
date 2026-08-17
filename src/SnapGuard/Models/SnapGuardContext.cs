@@ -26,11 +26,13 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
     public DbSet<OutstandingToken> OutstandingTokens { get; set; }
 
+    public DbSet<UserNotification> Notifications { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<StationToken>(entity =>
         {
-            entity.ToTable("station_tokens")
+            entity.ToTable("StationTokens")
                 .HasKey(e => e.TokenId)
                 .HasName("PRIMARY");
 
@@ -54,7 +56,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<Picture>(entity =>
         {
-            entity.ToTable("pictures")
+            entity.ToTable("Pictures")
                 .HasKey(p => p.PictureId)
                 .HasName("PRIMARY");
 
@@ -84,7 +86,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<StationEvent>(entity =>
         {
-            entity.ToTable("station_events")
+            entity.ToTable("StationEvents")
                 .HasKey(e => e.EventId)
                 .HasName("PRIMARY");
 
@@ -105,7 +107,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<MotionEvent>(entity =>
         {
-            entity.ToTable("motion_events")
+            entity.ToTable("MotionEvents")
                 .HasKey(e => e.MotionEventId)
                 .HasName("PRIMARY");
 
@@ -123,7 +125,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<Hub>(entity =>
         {
-            entity.ToTable("hubs")
+            entity.ToTable("Hubs")
                 .HasKey(e => e.HubId)
                 .HasName("PRIMARY");
 
@@ -140,7 +142,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<StationModel>(entity =>
         {
-            entity.ToTable("station_models")
+            entity.ToTable("StationModels")
                 .HasKey(e => e.StationModelId)
                 .HasName("PRIMARY");
 
@@ -171,7 +173,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<Station>(entity =>
         {
-            entity.ToTable("stations")
+            entity.ToTable("Stations")
                 .HasKey(e => e.StationId)
                 .HasName("PRIMARY");
 
@@ -198,7 +200,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<OutstandingToken>(entity =>
         {
-            entity.ToTable("outstanding_tokens")
+            entity.ToTable("OutstandingTokens")
                 .HasKey(e => e.TokenId)
                 .HasName("PRIMARY");
 
@@ -223,7 +225,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.ToTable("users")
+            entity.ToTable("Users")
                 .HasKey(u => u.UserId)
                 .HasName("PRIMARY");
 
@@ -267,7 +269,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                         .OnDelete(DeleteBehavior.Cascade),
                     j =>
                     {
-                        j.ToTable("hub_users");
+                        j.ToTable("HubUsers");
                         j.Property(e => e.JoinedAt)
                             .HasColumnType("TIMESTAMP")
                             .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -277,6 +279,33 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                             .HasColumnType("ENUM('OWNER','EDITOR','GUEST')");
                     }
                 );
+        });
+
+        modelBuilder.Entity<UserNotification>(entity =>
+        {
+            entity.ToTable("UserNotifications")
+                .HasKey(e => e.NotificationId)
+                .HasName("PRIMARY");
+
+            entity.HasIndex(e => e.UserId);
+
+            entity.Property(e => e.Title)
+                .HasMaxLength(64);
+            entity.Property(e => e.Content)
+                .HasMaxLength(256);
+            entity.Property(e => e.Type)
+                .HasConversion<string>()
+                .HasColumnType("ENUM('SYSTEM','ACCOUNT','ALERT','REMINDER','HUB','STATION','MOTION','CAMERA','OTHER')");
+            entity.Property(e => e.IsRead)
+                .HasColumnType("TINYINT(1)");
+            entity.Property(e => e.ReceivedAt)
+                .HasColumnType("TIMESTAMP")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.User)
+                .WithMany(p => p.Notifications)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 

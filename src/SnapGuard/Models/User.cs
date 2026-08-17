@@ -27,4 +27,6 @@ public record User
     public ICollection<Hub> Hubs { get; set; } = [];
 
     public ICollection<HubUser> HubUsers { get; set; } = [];
+
+    public ICollection<UserNotification> Notifications { get; set; } = [];
 }
