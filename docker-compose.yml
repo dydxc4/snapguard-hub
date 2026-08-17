@@ -1,27 +1,28 @@
 services:
   db:
     image: mariadb
-    restart: always
+    container_name: snapguard-db
+    restart: unless-stopped
     environment:
-      MARIADB_ROOT_PASSWORD: '5uP3R_p@S5'
+      MARIADB_ROOT_PASSWORD: 'snapguard-root'
     ports:
       - 3306:3306
     volumes:
-      - mariadb-data:/var/lib/mysql
-
+      - snapguard-db:/var/lib/mysql
   adminer:
     image: adminer
-    restart: always
+    container_name: snapguard-adminer
+    restart: unless-stopped
     ports:
       - 8080:8080
-
   mqtt:
     image: eclipse-mosquitto
+    container_name: snapguard-mqtt
     ports:
       - 1883:1883
     volumes:
-      - mosquitto-config:/mosquitto/config
+      - snapguard-mqtt-config:/mosquitto/config
 
 volumes:
-  mariadb-data:
-  mosquitto-config:
+  snapguard-db:
+  snapguard-mqtt-config:
