@@ -313,7 +313,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                             .ValueGeneratedOnAdd();
                         j.Property(e => e.Role)
                             .HasConversion<string>()
-                            .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<UserRole>());
+                            .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<HubUserRole>());
                     }
                 );
         });

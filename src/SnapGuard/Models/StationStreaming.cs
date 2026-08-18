@@ -4,7 +4,7 @@ namespace SnapGuard.Models;
 
 public class StationStreaming
 {
-    public int StreamingId { get; set; }
+    public long StreamingId { get; set; }
 
     public long StationId { get; set; }
 

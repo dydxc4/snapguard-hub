@@ -14,5 +14,5 @@ public class HubUser
 
     public DateTimeOffset JoinedAt { get; set; }
 
-    public UserRole Role { get; set; }
+    public HubUserRole Role { get; set; }
 }
