@@ -1,4 +1,5 @@
 using System.Net.NetworkInformation;
+using SnapGuard.Enums;
 
 namespace SnapGuard.Models;
 
@@ -18,6 +19,10 @@ public record Station
 
     public PhysicalAddress MacAddress { get; set; } = null!;
 
+    public bool IsEnabled { get; set; }
+
+    public StationStatus Status { get; set; }
+
     public string Version { get; set; } = null!;
 
     public string CoreVersion { get; set; } = null!;
@@ -33,4 +38,6 @@ public record Station
     public ICollection<MotionEvent> MotionEvents { get; set; } = [];
 
     public ICollection<StationToken> StationTokens { get; set; } = [];
+
+    public ICollection<StationStreaming> Streamings { get; set; } = [];
 }

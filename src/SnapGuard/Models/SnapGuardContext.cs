@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SnapGuard.Enums;
+using SnapGuard.Helpers;
 //using SnapGuard.Extensions;
 
 namespace SnapGuard.Models;
@@ -17,6 +19,8 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
     public DbSet<Station> Stations { get; set; }
 
     public DbSet<StationEvent> StationEvents { get; set; }
+
+    public DbSet<StationStreaming> StationStreamings { get; set; }
 
     public DbSet<MotionEvent> MotionEvents { get; set; }
 
@@ -66,10 +70,10 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                 .HasMaxLength(48);
             entity.Property(e => e.Format)
                 .HasConversion<string>()
-                .HasColumnType("ENUM('RGB565','YUV422','YUV420','GRAYSCALE','JPEG','RGB888','RAW','RGB444','RGB555')");
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<PictureFormat>());
             entity.Property(e => e.Resolution)
                 .HasConversion<string>()
-                .HasColumnType("ENUM('R_96X96','R_QQVGA','R_128X128','R_QCIF','R_HQVGA','R_240X240','R_QVGA','R_320X320','R_CIF','R_HVGA','R_VGA','R_SVGA','R_XGA','R_HD','R_SXGA','R_UXGA','R_FHD','R_P_HD','R_P_3MP','R_QXGA','R_QHD','R_WQXGA','R_P_FHD','R_QSXGA','R_5MP','R_INVALID')");
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<PictureResolution>());
             entity.Property(e => e.UploadedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("TIMESTAMP")
@@ -94,7 +98,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
             entity.Property(e => e.Type)
                 .HasConversion<string>()
-                .HasColumnType("ENUM('SYSTEM_RESTARTED','SYSTEM_WOKE_UP','SYSTEM_FAILED','BROWNOUT_DETECTED','WIFI_RECONNECTED','WIFI_AUTH_FAILED','CAMERA_FAILED','TAMPERING_DETECTED')");
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<EventType>());
             entity.Property(e => e.RegisteredAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("TIMESTAMP")
@@ -102,6 +106,34 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
             entity.HasOne(d => d.Station)
                 .WithMany(p => p.Events)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<StationStreaming>(entity =>
+        {
+            entity.ToTable("StationStreamings")
+                .HasKey(e => e.StreamingId)
+                .HasName("PRIMARY");
+
+            entity.HasIndex(e => e.StationId);
+
+            entity.Property(e => e.Status)
+                .HasConversion<string>()
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<StreamingStatus>());
+            entity.Property(e => e.IsRecording)
+                .HasColumnType("TINYINT(1)");
+            entity.Property(e => e.Resolution)
+                .HasConversion<string>()
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<PictureResolution>());
+            entity.Property(e => e.StartedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("TIMESTAMP")
+                .ValueGeneratedOnAdd();
+            entity.Property(e => e.FinishedAt)
+                .HasColumnType("TIMESTAMP");
+
+            entity.HasOne(e => e.Station)
+                .WithMany(e => e.Streamings)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -161,7 +193,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                 .HasColumnType("TINYINT(1)");
             entity.Property(e => e.CameraModel)
                 .HasConversion<string>()
-                .HasColumnType("ENUM('OV2640','OV3660','OV5640','OV7725','OV9650')");
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<CameraModel>());
             entity.Property(e => e.RegisteredAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("TIMESTAMP")
@@ -184,6 +216,11 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                 .HasMaxLength(40);
             entity.Property(e => e.MacAddress)
                 .HasMaxLength(20);
+            entity.Property(e => e.IsEnabled)
+                .HasColumnType("TINYINT(1)");
+            entity.Property(e => e.Status)
+                .HasConversion<string>()
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<StationStatus>());
             entity.Property(e => e.Version)
                 .HasMaxLength(12);
             entity.Property(e => e.CoreVersion)
@@ -276,7 +313,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                             .ValueGeneratedOnAdd();
                         j.Property(e => e.Role)
                             .HasConversion<string>()
-                            .HasColumnType("ENUM('OWNER','EDITOR','GUEST')");
+                            .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<UserRole>());
                     }
                 );
         });
@@ -295,7 +332,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                 .HasMaxLength(256);
             entity.Property(e => e.Type)
                 .HasConversion<string>()
-                .HasColumnType("ENUM('SYSTEM','ACCOUNT','ALERT','REMINDER','HUB','STATION','MOTION','CAMERA','OTHER')");
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<NotificationType>());
             entity.Property(e => e.IsRead)
                 .HasColumnType("TINYINT(1)");
             entity.Property(e => e.ReceivedAt)
