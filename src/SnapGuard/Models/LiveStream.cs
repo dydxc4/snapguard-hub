@@ -2,7 +2,7 @@ using SnapGuard.Enums;
 
 namespace SnapGuard.Models;
 
-public class StationStreaming
+public class LiveStream
 {
     public long StreamingId { get; set; }
 
@@ -10,7 +10,7 @@ public class StationStreaming
 
     public Station Station { get; set; } = null!;
 
-    public StreamingStatus Status { get; set; }
+    public LiveStreamStatus Status { get; set; }
 
     public bool IsRecording { get; set; }
 

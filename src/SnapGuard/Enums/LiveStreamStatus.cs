@@ -1,6 +1,6 @@
 namespace SnapGuard.Enums;
 
-public enum StreamingStatus
+public enum LiveStreamStatus
 {
     PLAYING,
     STOPPED,

@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SnapGuard.Enums;
 using SnapGuard.Helpers;
-//using SnapGuard.Extensions;
 
 namespace SnapGuard.Models;
 
@@ -20,7 +18,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
     public DbSet<StationEvent> StationEvents { get; set; }
 
-    public DbSet<StationStreaming> StationStreamings { get; set; }
+    public DbSet<LiveStream> LiveStreams { get; set; }
 
     public DbSet<MotionEvent> MotionEvents { get; set; }
 
@@ -109,9 +107,9 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<StationStreaming>(entity =>
+        modelBuilder.Entity<LiveStream>(entity =>
         {
-            entity.ToTable("StationStreamings")
+            entity.ToTable("LiveStreams")
                 .HasKey(e => e.StreamingId)
                 .HasName("PRIMARY");
 
@@ -119,7 +117,7 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
 
             entity.Property(e => e.Status)
                 .HasConversion<string>()
-                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<StreamingStatus>());
+                .HasColumnType(SnapGuardExtensions.GetMySqlEnumString<LiveStreamStatus>());
             entity.Property(e => e.IsRecording)
                 .HasColumnType("TINYINT(1)");
             entity.Property(e => e.Resolution)
@@ -190,6 +188,8 @@ public class SnapGuardContext(DbContextOptions options) : DbContext(options)
             entity.Property(e => e.HasPanTiltControl)
                 .HasColumnType("TINYINT(1)");
             entity.Property(e => e.HasNightVision)
+                .HasColumnType("TINYINT(1)");
+            entity.Property(e => e.HasMotionSensor)
                 .HasColumnType("TINYINT(1)");
             entity.Property(e => e.CameraModel)
                 .HasConversion<string>()

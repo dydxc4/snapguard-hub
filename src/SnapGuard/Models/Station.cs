@@ -39,5 +39,5 @@ public record Station
 
     public ICollection<StationToken> StationTokens { get; set; } = [];
 
-    public ICollection<StationStreaming> Streamings { get; set; } = [];
+    public ICollection<LiveStream> Streamings { get; set; } = [];
 }

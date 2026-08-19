@@ -18,6 +18,8 @@ public class StationModel
 
     public bool HasNightVision { get; set; }
 
+    public bool HasMotionSensor { get; set; }
+
     public CameraModel CameraModel { get; set; }
 
     public DateTimeOffset RegisteredAt { get; set; }
