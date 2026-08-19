@@ -30,6 +30,8 @@ builder.Services.Configure<MqttSettings>(
 builder.Services.Configure<PictureServerSettings>(
     builder.Configuration.GetSection("PictureServer"));
 
+builder.Services.AddScoped<DashboardService>();
+
 builder.Services.AddSingleton<IdGenerationService>();
 builder.Services.AddSingleton<RequestCorrelationService>();
 builder.Services.AddSingleton<CorrelationService>();
