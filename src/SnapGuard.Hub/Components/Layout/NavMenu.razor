@@ -1,30 +1,40 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">SnapGuard.Hub</a>
-    </div>
+﻿<div class="mb-margin px-margin flex items-center gap-gutter">
+    <span class="material-symbols-outlined text-primary text-3xl">shield</span>
+    <div class="text-headline-md font-headline-md font-bold text-primary hide-on-collapse">SnapGuard</div>
 </div>
-
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
+<nav class="flex-1 space-y-2 overflow-y-auto px-margin overflow-x-hidden">
+    <NavLink class="flex items-center gap-gutter border-l-2 border-primary text-primary bg-surface-container-highest rounded px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors" href="" Match="NavLinkMatch.All">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">Dashboard</span>
+    </NavLink>
+    <NavLink class="flex items-center gap-gutter text-on-surface-variant px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors rounded" href="counter">
+        <span class="material-symbols-outlined">videocam</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">CCTV Live</span>
+    </NavLink>
+    <NavLink class="flex items-center gap-gutter text-on-surface-variant px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors rounded" href="weather">
+        <span class="material-symbols-outlined">list_alt</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">Event Log</span>
+    </NavLink>
+    <NavLink class="flex items-center gap-gutter text-on-surface-variant px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors rounded" href="#">
+        <span class="material-symbols-outlined">hard_drive</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">Storage</span>
+    </NavLink>
+    <NavLink class="flex items-center gap-gutter text-on-surface-variant px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors rounded" href="#">
+        <span class="material-symbols-outlined">settings_input_component</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">Node Config</span>
+    </NavLink>
+</nav>
+<div class="mt-auto pt-margin border-t border-outline-variant space-y-2 px-margin overflow-x-hidden">
+    <button class="w-full bg-primary-container text-on-primary-container py-stack-sm rounded text-label-md font-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-stack-sm active:translate-x-1 transition-all">
+        <span class="material-symbols-outlined">visibility</span>
+        <span class="hide-on-collapse whitespace-nowrap">DEPLOY UPDATE</span>
+    </button>
+    <a class="flex items-center gap-gutter text-on-surface-variant px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors rounded active:translate-x-1 transition-all" href="#">
+        <span class="material-symbols-outlined">help</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">Support</span>
+    </a>
+    <a class="flex items-center gap-gutter text-on-surface-variant px-margin py-stack-sm hover:text-primary hover:bg-surface-container-high transition-colors rounded active:translate-x-1 transition-all" href="#">
+        <span class="material-symbols-outlined">terminal</span>
+        <span class="text-label-md font-label-md hide-on-collapse whitespace-nowrap">Terminal</span>
+    </a>
 </div>
-

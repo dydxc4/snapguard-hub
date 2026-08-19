@@ -1,19 +1,63 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<script type="module" src="@Assets["Components/Layout/MainLayout.razor.js"]"></script>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<!-- Mobile Overlay -->
+<div class="sidebar-overlay fixed inset-0 bg-black/50 z-20 hidden lg:hidden" id="mobile-overlay"></div>
+<!-- SideNavBar -->
+<aside class="docked left-0 h-full w-64 border-r border-outline-variant flex flex-col py-stack-md bg-surface-container z-30 flex-shrink-0 sidebar-hidden lg:sidebar-collapsed xl:transform-none xl:w-64" id="sidebar">
+    <NavMenu />
+</aside>
+
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col relative min-w-0">
+    <!-- TopNavBar -->
+    <header class="w-full flex justify-between items-center px-margin z-10 h-16 border-b border-outline-variant bg-surface-container-low text-primary font-body-md text-body-md font-label-md text-label-md flex-shrink-0">
+        <div class="flex items-center gap-margin">
+            <button class="p-base text-primary hover:bg-surface-container-high rounded transition-colors active:scale-95 transition-transform" id="sidebar-toggle">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <div class="text-headline-sm font-headline-sm font-bold text-primary hidden md:block">Hub</div>
+            <div class="relative w-64 hidden lg:block">
+                <span class="material-symbols-outlined absolute left-stack-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                <input class="w-full pl-stack-lg pr-stack-sm py-base rounded border border-outline bg-surface-container-highest text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container text-body-md font-body-md outline-none" placeholder="Search devices..." type="text"/>
+            </div>
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
+        <div class="flex items-center gap-gutter">
+            <nav class="hidden md:flex gap-gutter mr-gutter border-r border-outline-variant pr-gutter">
+                <a class="text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors px-stack-sm py-base rounded active:scale-95 transition-transform" href="#">Add Hub</a>
+                <a class="text-label-md font-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors px-stack-sm py-base rounded active:scale-95 transition-transform" href="#">Add Device</a>
+            </nav>
+            <button class="p-base text-primary hover:bg-surface-container-high rounded transition-colors relative active:scale-95 transition-transform">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded"></span>
+            </button>
+            <button class="p-base text-primary hover:bg-surface-container-high rounded transition-colors active:scale-95 transition-transform">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <img alt="Operator Avatar" class="w-8 h-8 rounded ml-stack-sm border border-outline-variant object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnufSeYOavnMnibzIreINZvnxjwjSqFPCp5qkuWixnKnT7foNCTspiY0m-_sXxeazcA542ATUReQ1_AVqdU4Yvhug1ImKFc22zYMUz7wGHPstcbSLPSkDlbXbahXTxhagFbOypO7TP4pBYOvqYy3SQ1P3p2QeWqdnHLBtFE1sNlMOsZd6kEAcHBTMwDzgVS5jqYITNSS5kuG39M09pE5Eg7FycoVdIaIVXx-j9rWlApPyN52VQvyLg"/>
+        </div>
+    </header>
+    <!-- Scrollable Content -->
+    <main class="flex-1 overflow-y-auto p-margin pb-24 bg-surface-container-lowest">
+        @Body
     </main>
+    <!-- Footer -->
+    <footer class="bottom-0 w-full flex justify-between items-center px-margin py-base z-10 border-t border-outline-variant bg-surface-dim xl:left-64 cursor-default" id="footer">
+        <div class="flex items-center gap-gutter">
+            <span class="font-label-sm text-label-sm text-secondary hidden sm:inline">SYS_VER_2.4.0 // STORAGE_UTIL: 78% // SYNC_STATUS: NOMINAL</span>
+            <span class="font-label-sm text-label-sm text-secondary sm:hidden">SYS NOMINAL</span>
+            <span class="text-on-surface-variant">|</span>
+            <div class="flex items-center gap-base text-label-sm font-label-sm text-on-surface-variant">
+                <span class="w-2 h-2 bg-[#27ae60] rounded inline-block"></span>Status: Online
+            </div>
+        </div>
+        <nav class="flex gap-gutter">
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-secondary-fixed transition-colors" href="#">SYSTEM_LOGS</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-secondary-fixed transition-colors" href="#">NETWORK_MAP</a>
+            <a class="text-label-sm font-label-sm text-on-surface-variant hover:text-secondary-fixed transition-colors hidden sm:block" href="#">API_DOCS</a>
+        </nav>
+    </footer>
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>

@@ -1,63 +1,197 @@
 ﻿@page "/"
 @using SnapGuard.Hub.Extensions
 @using SnapGuard.Hub.Services
+@using SnapGuard.Hub.DTOs.Services
 @using System.Text.Json
 @rendermode InteractiveServer
+@inject DashboardService DashboardService
 @inject IdGenerationService IdGenerator
 @inject IMqttClientService ClientService
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Dasboard</PageTitle>
 
-<h1>Hello, world!</h1>
+@if (data == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <!-- Header Section -->
+    <section class="flex flex-col md:flex-row justify-between items-start md:items-end mb-margin gap-gutter">
+        <div class="flex items-center gap-gutter">
+            <button class="p-stack-sm text-on-surface hover:bg-surface-container-high rounded transition-colors">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+            <div>
+                <h1 class="text-headline-lg font-headline-lg text-on-surface mb-base">Hola, @data.UserFirstName!</h1>
+                    <div class="flex items-center gap-stack-sm text-on-surface-variant text-body-md font-body-md">
+                    <span class="font-semibold text-on-surface">@data.SelectedHub.Name</span>
+                    <span class="w-1 h-1 bg-outline rounded"></span>
+                    <span>@data.SelectedHub.UserRole</span>
+                </div>
+            </div>
+        </div>
+        <div class="relative group">
+            <button class="flex items-center gap-stack-sm px-gutter py-stack-sm bg-surface-container-high border border-outline-variant rounded text-label-md font-label-md hover:bg-surface-container transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">hub</span>
+                @data.SelectedHub.Name
+                <span class="material-symbols-outlined text-on-surface-variant">arrow_drop_down</span>
+            </button>
+        </div>
+    </section>
+    <!-- Daily Event Counters -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-margin">
+        @foreach (var (key, value) in data.Counters)
+        {
+            <div class="bg-surface border border-outline-variant rounded p-gutter flex flex-col justify-between h-32 hover:border-primary-container transition-colors">
+                <div class="flex justify-between items-start">
+                    @switch (key)
+                    {
+                        case DTOs.Enums.CounterType.EVENT:
+                            <span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Eventos</span>
+                            <span class="material-symbols-outlined text-primary-container">event_note</span>
+                            break;
+                        case DTOs.Enums.CounterType.PHOTO:
+                            <span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Fotos</span>
+                            <span class="material-symbols-outlined text-primary-container">photo_camera</span>
+                            break;
+                        case DTOs.Enums.CounterType.MOTION:
+                            <span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Movimientos</span>
+                            <span class="material-symbols-outlined text-primary-container">motion_sensor_active</span>
+                            break;
+                        default:
+                            break;
+                    }
+                </div>
+                <div>
+                    <div class="text-headline-md font-headline-md text-on-surface mb-base font-label-md">@value.Count <span class="text-body-md font-body-md font-normal text-on-surface-variant">hoy</span></div>
+                    @if (value.LastEventTimestamp.HasValue)
+                    {
+                        <div class="text-label-sm font-label-sm text-on-surface-variant">Last: @value.LastEventDescription at @value.LastEventTimestamp</div>
+                    }
+                </div>
+            </div>
+        }
+    </section>
+    <!-- Main Grid -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-margin">
+        <!-- Left Column: Streaming Grid -->
+        <div class="lg:col-span-2 flex flex-col gap-stack-sm">
+            <div class="flex justify-between items-center mb-base">
+                <h2 class="text-headline-sm font-headline-sm text-on-surface">Transmisiones</h2>
+                <button class="text-primary-container text-label-md font-label-md hover:underline">Ver todo</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                <!-- Feeds -->
+                @foreach (var live in data.LiveStreams)
+                {
+                    <div class="relative bg-black rounded overflow-hidden aspect-video border border-outline-variant group">
+                        @if (live.Status == Enums.LiveStreamStatus.SIGNAL_LOST)
+                        {
+                            <div class="absolute inset-0 bg-surface-container-high flex flex-col items-center justify-center text-on-surface-variant">
+                                <span class="material-symbols-outlined text-4xl mb-stack-sm">videocam_off</span>
+                                <span class="text-label-md font-label-md">Señal perdida</span>
+                            </div>
+                            <div class="absolute top-stack-sm left-stack-sm flex gap-base">
+                                <div class="w-2 h-2 bg-[#95a5a6] rounded mt-1"></div>
+                            </div>
+                        }
+                        else
+                        {
+                            <img class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" data-alt="A CCTV security camera view." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmOhOdjidnYgveuJw7nqoqLpTjpz9K03bAluCC1r2NyA4FG0rOb3nIQWQMvFng3KXbNWVLDfjyurBbSd4RTgILQKdOgfNGpExslx8VIa4BwunDjVUiuRXFdY6pdP-MGN19WA0tthALv5pr8M8XwCidYRZsM4fsGtNq3AhA_buCFreW9CYfpPfi_GZq5PeMfIVfKI-H_bx0L1TDH4XlD0ZUUIBe1IzoP5HEn_2mY_zTE803fj-g8jy9"/>
+                            <div class="absolute top-stack-sm left-stack-sm flex gap-base">
+                                @if (live.IsRecording)
+                                {
+                                    <div class="w-2 h-2 bg-[#7b0828] rounded mt-1 animate-pulse"></div>
+                                    <span class="bg-[#7b0828]/80 text-white px-base rounded text-[10px] font-semibold tracking-wider font-label-sm">REC</span>
+                                }
+                                else
+                                {
+                                    <div class="w-2 h-2 bg-[#27ae60] rounded mt-1 animate-pulse"></div>
+                                }
+                                <span class="bg-black/60 text-white px-base rounded text-[10px] font-semibold tracking-wider font-label-sm">@live.Quality</span>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                <button class="w-12 h-12 bg-surface-bright text-white rounded flex items-center justify-center hover:scale-110 transition-transform">
+                                    @if (live.Status == Enums.LiveStreamStatus.PLAYING)
+                                    {
+                                        <span class="material-symbols-outlined text-2xl">pause</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="material-symbols-outlined text-2xl">play_arrow</span>
+                                    }
+                                </button>
+                            </div>
+                        }
+                        <div class="absolute bottom-0 left-0 right-0 h-10 bg-black/40 flex justify-between items-center px-stack-sm">
+                            <span class="text-white text-label-md font-label-md drop-shadow-md">@live.DeviceLabel</span>
+                            <button class="text-white hover:text-primary-container transition-colors">
+                                <span class="material-symbols-outlined text-sm">more_vert</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- Right Column: Device List -->
+        <div class="flex flex-col gap-stack-sm">
+            <h2 class="text-headline-sm font-headline-sm text-on-surface mb-base">Dispositivos</h2>
+            <div class="bg-surface border border-outline-variant divide-y divide-outline-variant rounded flex flex-col overflow-hidden">
+                <!-- Devices -->
+                @foreach (var device in data.Devices)
+                {
+                    <div class="p-stack-sm hover:bg-surface-bright hover:border-l-2 hover:border-l-primary-container transition-all group">
+                        <div class="flex items-center justify-between mb-stack-sm">
+                            <div class="flex items-center gap-stack-sm">
+                                <div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-on-surface">
+                                    <span class="material-symbols-outlined text-sm">videocam</span>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-base">
+                                        <span class="text-label-md font-label-md text-on-surface">@device.Label</span>
+                                        <button class="text-outline hover:text-primary-container opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-[14px]">edit</span></button>
+                                    </div>
+                                    <div class="flex items-center gap-base">
+                                        @if (device.Status == Enums.StationStatus.CONNECTED)
+                                        {
+                                            <div class="w-1.5 h-1.5 bg-[#27ae60] rounded"></div>
+                                        }
+                                        else if (device.Status == Enums.StationStatus.ERROR)
+                                        {
+                                            <div class="w-1.5 h-1.5 bg-[#7b0828] rounded"></div>
+                                        }
+                                        else if (device.Status == Enums.StationStatus.DISCONNECTED)
+                                        {
+                                            <div class="w-1.5 h-1.5 bg-[#95a5a6] rounded"></div>
+                                        }
+                                        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-label-sm">@device.ModelName</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-on-surface-variant hover:text-primary-container p-1"><span class="material-symbols-outlined text-sm">settings</span></button>
+                        </div>
+                        <div class="flex gap-base">
+                            <button class="flex-1 bg-surface-container-low hover:bg-surface-container-high text-on-surface text-[10px] font-semibold py-1 rounded transition-colors font-label-sm">Eventos</button>
+                            <button class="flex-1 bg-surface-container-low hover:bg-surface-container-high text-on-surface text-[10px] font-semibold py-1 rounded transition-colors font-label-sm">Fotos</button>
+                            @if (device.HasMotionSensor)
+                            {
+                                <button class="flex-1 bg-surface-container-low hover:bg-surface-container-high text-on-surface text-[10px] font-semibold py-1 rounded transition-colors font-label-sm">Movimientos</button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
 
-Welcome to your new app.
-
-<p role="status">Is waiting? @(isWaiting)</p>
-<p role="status">Status: @(statusText ?? "Ok")</p>
-
-<button @onclick="TakePicture">Take picture!</button>
-<button @onclick="GetConfig">Get configuration</button>
 
 @code {
-    private bool isWaiting = false;
-    private string? statusText = null;
+    private DashboardDto? data = null;
 
     protected override async Task OnInitializedAsync()
-    { }
-
-    private async Task TakePicture()
     {
-        try
-        {
-            isWaiting = true;
-            await ClientService.TakePicture(1);
-            statusText = null;
-        }
-        catch (Exception ex)
-        {
-            statusText = ex.Message;
-        }
-        finally
-        {
-            isWaiting = false;
-        }
-    }
-
-    private async Task GetConfig()
-    {
-        try
-        {
-            isWaiting = true;
-            var result = await ClientService.GetCameraConfig(1);
-            statusText = JsonSerializer.Serialize(result);
-        }
-        catch (Exception ex)
-        {
-            statusText = ex.Message;
-        }
-        finally
-        {
-            isWaiting = false;
-        }
+        data = await DashboardService.GetDashboardAsync(1, 1);
     }
 }
